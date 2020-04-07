@@ -434,10 +434,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
             case "Control": ctrFlag = false;
                 break;
             case "Alt": altFlag = false;
+                break;                
+            case "Backspace": resultString = resultString.split('').pop().join('');
                 break;
-        }        
-        resultString += String.fromCharCode(event.keyCode);
-        textarea.innerText = textarea.innerText + resultString;
+            default: {
+                resultString += String.fromCharCode(event.keyCode);
+                textarea.innerText = textarea.innerText + resultString;
+            };
+        }         
     }   
 
     window.onstorage = changeLang(event);
@@ -494,8 +498,7 @@ function fillBtns(obj, objLines, btnLines) {
             let button = element.querySelector("." + btn);
 
             button.addEventListener("mousedown", (event) => {
-                event.target.parentNode.parentNode.classList.add("active");
-                //resultString += String.fromCharCode(event.charCode);
+                event.target.parentNode.parentNode.classList.add("active");                
             });
 
             button.addEventListener("mouseup", (event) => {
@@ -509,6 +512,7 @@ function fillBtns(obj, objLines, btnLines) {
                     case "CapsLock": CapsLockFlag = true;
                         break;
                 }
+                
                 if (ctrFlag && altFlag) {
                     if(localStorage.getItem("Lang") == "en")
                         localStorage.setItem("Lang", "ru");
@@ -517,12 +521,15 @@ function fillBtns(obj, objLines, btnLines) {
         
                     changeLang(event);
                 }
+
+                resultString += String.fromCharCode(event.target.classList[1]);
+                textarea.innerText = textarea.innerText + resultString;
             });
 
             let eng = button.querySelector(".eng");
             let rus = button.querySelector(".rus");
-            eng.innerHTML = `<span class="caseDown hidden">${engUnshift[line][ind][0] in metaSymb ? metaSymb[engUnshift[line][ind][0]] : engUnshift[line][ind][0]}</span><span class="caseUp hidden">${engShift[line][ind][0] in metaSymb ? metaSymb[engUnshift[line][ind][0]] : engUnshift[line][ind][0]}</span>`;
-            rus.innerHTML = `<span class="caseDown hidden">${rusUnshift[line][ind][0] in metaSymb ? metaSymb[rusShift[line][ind][0]] : rusUnshift[line][ind][0]}</span><span class="caseUp hidden">${rusShift[line][ind][0] in metaSymb ? metaSymb[rusShift[line][ind][0]] : rusShift[line][ind][0]}</span>`;
+            eng.innerHTML = `<span class="caseDown hidden ${engUnshift[line][ind][2]}">${engUnshift[line][ind][0] in metaSymb ? metaSymb[engUnshift[line][ind][0]] : engUnshift[line][ind][0]}</span><span class="caseUp hidden ${engShift[line][ind][2]}">${engShift[line][ind][0] in metaSymb ? metaSymb[engUnshift[line][ind][0]] : engUnshift[line][ind][0]}</span>`;
+            rus.innerHTML = `<span class="caseDown hidden ${engUnshift[line][ind][2]}">${rusUnshift[line][ind][0] in metaSymb ? metaSymb[rusShift[line][ind][0]] : rusUnshift[line][ind][0]}</span><span class="caseUp hidden ${rusShift[line][ind][2]}">${rusShift[line][ind][0] in metaSymb ? metaSymb[rusShift[line][ind][0]] : rusShift[line][ind][0]}</span>`;
 
         });
 
